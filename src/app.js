@@ -40,8 +40,9 @@ app.put("/repositories/:id", (request, response) => {
   if (repoIndex < 0) {
     return response.status(400).json({ error: "Project not found."});
   }
+  actualRepo = repositories[repoIndex] = repo;
   repo = {
-    id,
+    ...actualRepo,
     title,
     url,
     techs,
@@ -58,7 +59,7 @@ app.delete("/repositories/:id", (request, response) => {
     return response.status(400).json({ "error": "Project not found."});
   }
   repositories.splice(repoIndex, 1);
-  return response.json({ "message": "Project deleted with success."});
+  return response.status(204).json({});
 });
 
 app.post("/repositories/:id/like", (request, response) => {
@@ -68,7 +69,7 @@ app.post("/repositories/:id/like", (request, response) => {
     return response.status(400).json( { "error": "Project not found."});
   }
   repositories[repoIndex].likes += 1;
-  return response.json({ "numberOfLikes": repositories[repoIndex].likes })
+  return response.json({ "likes": repositories[repoIndex].likes })
 });
 
 module.exports = app;
